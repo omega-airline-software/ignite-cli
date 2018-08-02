@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IgniteCLI", "Ignite-CLI\IgniteCLI.csproj", "{B1A92D8A-DDE7-4537-85FD-1647E7CCCA2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IgniteCLI", "Ignite-CLI\IgniteCLI.csproj", "{B1A92D8A-DDE7-4537-85FD-1647E7CCCA2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{9B5E8A29-6895-44FF-814C-EA1C54FCC973}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B1A92D8A-DDE7-4537-85FD-1647E7CCCA2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1A92D8A-DDE7-4537-85FD-1647E7CCCA2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1A92D8A-DDE7-4537-85FD-1647E7CCCA2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B5E8A29-6895-44FF-814C-EA1C54FCC973}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B5E8A29-6895-44FF-814C-EA1C54FCC973}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B5E8A29-6895-44FF-814C-EA1C54FCC973}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B5E8A29-6895-44FF-814C-EA1C54FCC973}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
