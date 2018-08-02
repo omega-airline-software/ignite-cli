@@ -43,7 +43,7 @@ Ignite provides multiple methods for output, including the ability to customize 
 -   `CLI.Out(string s, ConsoleColor fore, ConsoleColor back = ConsoleColor.Black)`
     -   Outputs `s` to a new line in the Console with the given foreground and background color
 
-#### Dynamic
+#### Programmability
 
 Ignite lets you simulate user input for programmatic command execution
 
