@@ -20,18 +20,37 @@ namespace IgniteCLI
         #endregion
 
         private static CommandList Commands;
-        private static Command HelpCommand = new Command
+        private static CommandList DefaultCommands = new CommandList
         {
-            Name = "help",
-            Description = "Shows this list of commands",
-            Function = args => { CLI.Help(); }
+            new Command
+            {
+                Name = "colors",
+                Description = "Displays examples for all available console colors",
+                Function = args =>
+                {
+                    var colors = Enum.GetValues(typeof(ConsoleColor)).Cast<ConsoleColor>();
+                    foreach (var c in colors)
+                        CLI.Out(c.ToString(), c);
+                    foreach (var c in colors)
+                        CLI.Out(c.ToString(), ConsoleColor.Gray, c);
+                }
+            },
+            new Command
+            {
+                Name = "help",
+                Description = "Shows this list of commands",
+                Function = args => { CLI.Help(); }
+            },
         };
 
         public static void Start(CommandList commands)
         {
             Commands = commands;
-            if (!Commands.Any(x => x.Name == "help"))
-                Commands.Insert(0, HelpCommand);
+            foreach(var cmd in DefaultCommands)
+            {
+                if (!Commands.Any(x => x.Name == cmd.Name))
+                    Commands.Insert(0, cmd);
+            }
 
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             Console.Write("> ");
