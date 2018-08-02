@@ -4,7 +4,7 @@
 
 ## Overview
 
-Ignite helps you quickly create and augment your .NET Core Console App projects. When Ignite is given a list of Commands, set up is complete. Ignite will parse and convert user input automatically then trigger the given functions with the appropriate arguments.
+Ignite helps you easily and quickly turn a Console App into a fully-fledged Command Line Interface. When Ignite is given a list of Commands, set up is complete. Ignite will parse and convert user input automatically then trigger the given functions with the appropriate arguments.
 
 ## Getting Started
 
