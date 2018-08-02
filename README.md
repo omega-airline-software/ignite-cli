@@ -23,7 +23,55 @@ Install-Package IgniteCLI
 
 **NOTE:** .NET Core 2.0 is required in order to use Ignite.
 
-## Command Structure
+# Usage
+
+## API
+
+-   `CLI.Start(CommandList commands)`
+    -   This method is what initializes Ignite with the given `CommandList`
+
+#### Printing
+
+Ignite provides multiple methods for output, including the ability to customize color
+
+-   `CLI.Help()`
+    -   Help prints out the `CommandList` in an easy-to-read format
+-   `CLI.Break()`
+    -   Outputs a line of hypens to a new line in the Console
+-   `CLI.Out(string s = "")`
+    -   Outputs `s` to a new line in the Console
+-   `CLI.Out(string s, ConsoleColor fore, ConsoleColor back = ConsoleColor.Black)`
+    -   Outputs `s` to a new line in the Console with the given foreground and background color
+
+#### Dynamic
+
+Ignite lets you simulate user input for programmatic command execution
+
+-   `CLI.Run(string command, params string[] args)`
+    -   Runs the `command` with the provided `args` as if they were typed into the Console by a user
+    -   Example: `CLI.Run("add", "a 10", "b 5")`
+    -   Example: `CLI.Run("add", new string[2] {"a 10", "b 5"})`
+-   `CLI.Run(params string[] input)`
+    -   Extracts the first element in the array and calls the above `CLI.Run()` passing that in as the `command` and the rest as the `args`
+    -   Example: `CLI.Run("add", "a 10", "b 5")`
+    -   Example: `CLI.Run(new string[3] {"add", "a 10", "b 5"})`
+
+#### Parsing Arguments
+
+During command functions, Ignite provides quick methods to automatically parse and convert arguments
+
+-   `CLI.String(Dictionary<string, string> d, string key)`
+    -   Parses the value from the `Dictionary<string, string>` as a String
+-   `CLI.Int(Dictionary<string, string> d, string key)`
+    -   Parses the value from the `Dictionary<string, string>` as a Int
+-   `CLI.Bool(Dictionary<string, string> d, string key)`
+    -   Parses the value from the `Dictionary<string, string>` as a Bool
+    -   "true" and "false" are evaluated appropriately
+    -   When no value is given, it is evaluated as true
+
+# Commands
+
+## Structure
 
 ```cs
 public static CommandList Commands = new CommandList
@@ -54,38 +102,6 @@ public static CommandList Commands = new CommandList
     },
 }
 ```
-
-# Usage
-
-## API
-
--   `CLI.Start(CommandList commands)`
-    -   This method is what initializes Ignite with the given `CommandList`
--   `CLI.Help()`
-    -   Help prints out the `CommandList` in an easy-to-read format
--   `CLI.Break()`
-    -   Outputs a line of hypens to a new line in the Console
--   `CLI.Out(string s = "")`
-    -   Outputs `s` to a new line in the Console
--   `CLI.Out(string s, ConsoleColor fore, ConsoleColor back = ConsoleColor.Black)`
-    -   Outputs `s` to a new line in the Console with the given foreground and background color
--   `CLI.Run(string command, params string[] args)`
-    -   Runs the `command` with the provided `args` as if they were typed into the Console by a user
--   `CLI.Run(params string[] input)`
-    -   Shortened version of `CLI.Run(string command, params string[] args)` where the first item in the array is the `command` and the rest are the `args`
-
-### Parsing Arguments
-
-Ignite provides quick methods to automatically parse and convert arguments from commands
-
--   `CLI.String(Dictionary<string, string> d, string key)`
-    -   Parses the value from the `Dictionary<string, string>` as a String
--   `CLI.Int(Dictionary<string, string> d, string key)`
-    -   Parses the value from the `Dictionary<string, string>` as a Int
--   `CLI.Bool(Dictionary<string, string> d, string key)`
-    -   Parses the value from the `Dictionary<string, string>` as a Bool
-    -   "true" and "false" are evaluated appropriately
-    -   When no value is given, it is evaluated as true
 
 ## Example
 
@@ -128,7 +144,7 @@ new Command
 
 ---
 
-## Sample Program
+# Sample Program
 
 This is an example of a simple CLI made with Ignite.
 
