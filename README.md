@@ -55,6 +55,9 @@ Ignite lets you simulate user input for programmatic command execution
     -   Extracts the first element in the array and calls the above `CLI.Run()` passing that in as the `command` and the rest as the `args`
     -   Example: `CLI.Run("add", "a 10", "b 5")`
     -   Example: `CLI.Run(new string[3] {"add", "a 10", "b 5"})`
+-   `CLI.Run(string input)`
+    -   Parses the string just like raw user input
+    -   Example: `CLI.Run("add -a 10 -b 5")`
 
 #### Parsing Arguments
 
