@@ -71,10 +71,10 @@ public static CommandList Commands = new CommandList
     -   Outputs `s` to a new line in the Console with the given foreground and background color
 -   `CLI.Run(string command, params string[] args)`
     -   Runs the `command` with the provided `args` as if they were typed into the Console by a user
-    -   Example: `CLI.Run("add", "-a 10 -b 5")`
+    -   Example: `CLI.Run("add", "a 10", "b 5")`
 -   `CLI.Run(params string[] input)`
     -   Shortened version of `CLI.Run(string command, params string[] args)` where the first item in the array is the `command` and the rest are the `args`
-    -   Example: `CLI.Run("add -a 10 -b 5")`
+    -   Example: `CLI.Run("add", "a 10", "b 5")`
 
 ### Parsing Arguments
 
