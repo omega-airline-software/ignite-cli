@@ -10,16 +10,10 @@ steps:
   args: ['build', '-c', 'Release']
   dir: './IgniteCLI'
 
-- id: 'Publish Solution'
-  name: 'gcr.io/cloud-builders/dotnet'
-  args: ['publish', '-c', 'Release']
-  dir: './IgniteCLI'
-  timeout: 120s
-
 - id: 'Push Nuget Package'
   name: 'gcr.io/cloud-builders/dotnet'
-  args: ['nuget', 'push', 'IgniteCLI.1.0.0.nupkg', '-k', '$(./ignite-cli/ignite-cli-nuget-key.txt)', '-s', 'https://api.nuget.org/v3/index.json']
-  dir: './IgniteCLI/Ignite-CLI/bin/Release/netcoreapp2.0/publish/'
+  args: ['nuget', 'push', 'IgniteCLI.1.0.1.nupkg', '-k', '$(./ignite-cli/ignite-cli-nuget-key.txt)', '-s', 'https://api.nuget.org/v3/index.json']
+  dir: './IgniteCLI/Ignite-CLI/bin/Release'
 
 # artifacts:
 #   objects:
