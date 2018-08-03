@@ -21,7 +21,7 @@ steps:
   secretEnv: ['APIKEY']
 
 secrets:
-- kmsKeyName: projects/$PROJECT_ID/locations/global/keyRings/ignite-cli/cryptoKeys/ignite-cli
+- kmsKeyName: projects/ames-6/locations/global/keyRings/ignite-cli/cryptoKeys/ignite-cli
   secretEnv:
     APIKEY: 'CiQAbWRKvq56dYFsCB2heVTGl1NcnLzKHcTDQGziYMtvV8MFi+0SWADKLie3QwjAyveFeYpuj7EIqMkEqfV5OFsIkdY8mM8GgVdog6481R2XDrt+hXiYSVnYyInvyfwfFWiFwBBhWufjZrBnfbtBUJMjsjGBgHEf7cE0089O+88='
 
