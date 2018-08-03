@@ -1,3 +1,4 @@
+steps:
 - id: 'Build Solution'
   name: 'gcr.io/cloud-builders/dotnet'
   args: ['build', '-c', 'Release'] # configured so dotnet build produces a .nupkg file
