@@ -7,8 +7,9 @@ steps:
 
 - id: 'Publish Solution'
   name: 'gcr.io/cloud-builders/dotnet'
-  args: ['pack']
+  args: ['publish', '-c', 'Release']
   dir: './IgniteCLI'
+  timeout: 120s
 
 - id: 'Push Nuget Package'
   name: 'gcr.io/cloud-builders/dotnet'
