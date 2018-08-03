@@ -6,7 +6,7 @@ steps:
   #dir: '.'
 
 - id: 'Display Nuget API Key'
-  name: 'gcr.io/cloud-builders/docker'
+  name: 'ubuntu'
   args: ['cat', 'ignite-cli-nuget-key.txt']
 
 - id: 'Build Solution'
