@@ -5,7 +5,7 @@ steps:
   timeout: 120s
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '-t', 'gcr.io/ames-6/ignite-cli', './IgniteCLI' ]
-  dir: './IgniteCLI/Ignite-CLI/bin/Release/netcoreapp2.0/publish'
+  args: [ 'build', '-t', 'gcr.io/ames-6/ignite-cli', 'IgniteCLI' ]
+  dir: 'IgniteCLI/Ignite-CLI/bin/Release/netcoreapp2.0/publish'
 
 images: ['gcr.io/ames-6/ignite-cli']
