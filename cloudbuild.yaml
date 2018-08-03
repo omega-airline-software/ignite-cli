@@ -18,6 +18,7 @@ steps:
   name: 'gcr.io/cloud-builders/dotnet'
   args: ['nuget', 'push', 'IgniteCLI.1.0.1.nupkg', '-k $$APIKEY', '-s', 'https://api.nuget.org/v3/index.json']
   dir: './IgniteCLI/Ignite-CLI/bin/Release'
+  secretEnv: ['APIKEY']
 
 secrets:
 - kmsKeyName: projects/$PROJECT_ID/locations/global/keyRings/ignite-cli/cryptoKeys/ignite-cli
