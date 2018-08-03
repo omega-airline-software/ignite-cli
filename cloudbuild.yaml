@@ -1,25 +1,10 @@
-steps:
-- id: 'Download Nuget API Key'
-  name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', 'gs://ignite-cli/ignite-cli-nuget-key.txt', '.']
-  #args: ['kms', 'decrypt', '--ciphertext-file=nuget.txt.enc', '--plaintext-file=nuget.txt', '--location=global', '--keyring=ignite-cli', '--key=ignite-cli']
-  #dir: '.'
-
-- id: 'Display Nuget API Key'
-  name: 'ubuntu'
-  args: ['cat', 'ignite-cli-nuget-key.txt']
-
 - id: 'Build Solution'
   name: 'gcr.io/cloud-builders/dotnet'
-  args: ['build', '-c', 'Release']
+  args: ['build', '-c', 'Release'] # configured so dotnet build produces a .nupkg file
   dir: './IgniteCLI'
-  
+
+
 - id: 'Push Nuget Package'
   name: 'gcr.io/cloud-builders/dotnet'
-  args: ['nuget', 'push', 'IgniteCLI.1.0.1.nupkg', '-k', '${_API_KEY}', '-s', 'https://api.nuget.org/v3/index.json']
+  args: ['nuget', 'push', 'IgniteCLI.1.0.1.nupkg', '-k', '${_API_KEY}', '-s', 'https://api.nuget.org/v3/index.json'] # ${_API_KEY} is a substitution variable configured on Cloud Build
   dir: './IgniteCLI/Ignite-CLI/bin/Release'
-
-# artifacts:
-#   objects:
-#     location: ['gs://ignite-cli']
-#     paths: [IgniteCLI/Ignite-CLI/bin/Release/netcoreapp2.0/publish']
