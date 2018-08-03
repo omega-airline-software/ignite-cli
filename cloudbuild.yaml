@@ -1,18 +1,21 @@
 steps:
+- id: 'Download Nuget API Key'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['gsutil', 'cp', 'gs://ignite-cli/ignite-cli-nuget-key.txt']
   #args: ['kms', 'decrypt', '--ciphertext-file=nuget.txt.enc', '--plaintext-file=nuget.txt', '--location=global', '--keyring=ignite-cli', '--key=ignite-cli']
   #dir: '.'
 
+- id: 'Publish Solution'
 - name: 'gcr.io/cloud-builders/dotnet'
   args: ['publish', '-c', 'Release']
   dir: './IgniteCLI'
   timeout: 120s
 
+- id: 'Push Nuget Package'
 - name: 'gcr.io/cloud-builders/dotnet'
   args: ['nuget', 'push', 'IgniteCLI.1.0.1.nupkg', '-k', '$(ignite-cli/ignite-cli-nuget-key.txt)', '-s', 'https://api.nuget.org/v3/index.json']
 
-artifacts:
-  objects:
-    location: ['gs://ignite-cli']
-    paths: [IgniteCLI/Ignite-CLI/bin/Release/netcoreapp2.0/publish']
+# artifacts:
+#   objects:
+#     location: ['gs://ignite-cli']
+#     paths: [IgniteCLI/Ignite-CLI/bin/Release/netcoreapp2.0/publish']
