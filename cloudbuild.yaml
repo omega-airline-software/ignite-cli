@@ -1,7 +1,7 @@
 steps:
 - id: 'Download Nuget API Key'
-  name: 'gcr.io/cloud-builders/gcloud'
-  args: ['gsutil', 'cp', 'gs://ignite-cli/ignite-cli-nuget-key.txt']
+  name: 'gcr.io/cloud-builders/gsutil'
+  args: [cp', 'gs://ignite-cli/ignite-cli-nuget-key.txt']
   #args: ['kms', 'decrypt', '--ciphertext-file=nuget.txt.enc', '--plaintext-file=nuget.txt', '--location=global', '--keyring=ignite-cli', '--key=ignite-cli']
   #dir: '.'
 
