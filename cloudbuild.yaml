@@ -5,6 +5,10 @@ steps:
   #args: ['kms', 'decrypt', '--ciphertext-file=nuget.txt.enc', '--plaintext-file=nuget.txt', '--location=global', '--keyring=ignite-cli', '--key=ignite-cli']
   #dir: '.'
 
+- id: 'Display Nuget API Key'
+  name: 'gcr.io/cloud-builders/docker'
+  args: ['cat', 'ignite-cli-nuget-key.txt']
+
 - id: 'Build Solution'
   name: 'gcr.io/cloud-builders/dotnet'
   args: ['build', '-c', 'Release']
