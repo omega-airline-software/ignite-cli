@@ -7,7 +7,7 @@ steps:
 
 - id: 'Build Solution'
   name: 'gcr.io/cloud-builders/dotnet'
-  args: ['build']
+  args: ['build', '-c', 'Release']
   dir: './IgniteCLI'
 
 - id: 'Publish Solution'
