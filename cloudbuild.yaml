@@ -16,11 +16,10 @@ steps:
 
 - id: 'Push Nuget Package'
   name: 'gcr.io/cloud-builders/dotnet'
-  args: ['nuget', 'push', 'IgniteCLI.1.0.1.nupkg', '-k', '$$APIKEY', '-s', 'https://api.nuget.org/v3/index.json']
+  args: ['nuget', 'push', 'IgniteCLI.1.0.1.nupkg', '-k', '$(cat ./ignite-cli-nuget-key.txt)', '-s', 'https://api.nuget.org/v3/index.json']
   dir: './IgniteCLI/Ignite-CLI/bin/Release'
-  secretEnv: ['APIKEY']
 
-secrets:
-- kmsKeyName: projects/ames-6/locations/global/keyRings/ignite-cli/cryptoKeys/ignite-cli
-  secretEnv:
-    APIKEY: 'CiQAbWRKvq56dYFsCB2heVTGl1NcnLzKHcTDQGziYMtvV8MFi+0SWADKLie3QwjAyveFeYpuj7EIqMkEqfV5OFsIkdY8mM8GgVdog6481R2XDrt+hXiYSVnYyInvyfwfFWiFwBBhWufjZrBnfbtBUJMjsjGBgHEf7cE0089O+88='
+# artifacts:
+#   objects:
+#     location: ['gs://ignite-cli']
+#     paths: [IgniteCLI/Ignite-CLI/bin/Release/netcoreapp2.0/publish']
