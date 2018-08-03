@@ -14,6 +14,11 @@ steps:
   args: ['build', '-c', 'Release']
   dir: './IgniteCLI'
 
+- id: 'Test'
+  name: 'ubuntu'
+  args: ['echo', '$(cat ./ignite-cli-nuget-key.txt)']
+  dir: './IgniteCLI/Ignite-CLI/bin/Release'
+
 - id: 'Push Nuget Package'
   name: 'gcr.io/cloud-builders/dotnet'
   args: ['nuget', 'push', 'IgniteCLI.1.0.1.nupkg', '-k', '$(cat ./ignite-cli-nuget-key.txt)', '-s', 'https://api.nuget.org/v3/index.json']
