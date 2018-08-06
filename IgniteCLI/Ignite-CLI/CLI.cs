@@ -17,6 +17,7 @@ namespace IgniteCLI
         public static string String(Dictionary<string, string> d, string key) => d.ContainsKey(key.ToLower()) ? d[key.ToLower()] : null;
         public static int Int(Dictionary<string, string> d, string key) => Convert.ToInt32(CLI.String(d, key));
         public static bool Bool(Dictionary<string, string> d, string key) => d.ContainsKey(key.ToLower()) ? d[key.ToLower()] == "true" : false;
+        public static T ArgToEnum<T>(Dictionary<string, string> d, string key) => String(d, key).ToEnum<T>();
         #endregion
 
         private static CommandList Commands;
