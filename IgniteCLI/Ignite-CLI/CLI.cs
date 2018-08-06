@@ -20,7 +20,7 @@ namespace IgniteCLI
         #endregion
 
         private static CommandList Commands;
-        private static CommandList DefaultCommands = new CommandList
+        private static readonly CommandList DefaultCommands = new CommandList
         {
             new Command
             {
@@ -39,14 +39,27 @@ namespace IgniteCLI
             {
                 Name = "help",
                 Description = "Shows this list of commands",
-                Function = args => { CLI.Help(); }
+                Function = args =>
+                {
+                    if(args.Count > 0)
+                    {
+                        var cmd = Commands.FirstOrDefault(x => x.Name.ToLower() == args.Keys.First());
+                        if(cmd != null)
+                        {
+                            CLI.Help(cmd);
+                            return;
+                        }
+                    }
+
+                    CLI.Help();
+                }
             },
         };
 
         public static void Start(CommandList commands)
         {
             Commands = commands;
-            foreach(var cmd in DefaultCommands)
+            foreach (var cmd in DefaultCommands)
             {
                 if (!Commands.Any(x => x.Name == cmd.Name))
                     Commands.Insert(0, cmd);
@@ -79,13 +92,20 @@ namespace IgniteCLI
                 try
                 {
                     cmd = input.Substring(0, input.IndexOf(" "));
-                    var tokens = input.Substring(input.IndexOf(" ") + 2).Split(new string[] { " -" }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var t in tokens)
+                    if (cmd.ToLower() == "help")
                     {
-                        if (t.Contains(' '))
-                            cmdArgs.Add(t.Substring(0, t.IndexOf(' ')).ToLower(), t.Substring(t.IndexOf(' ') + 1));
-                        else
-                            cmdArgs.Add(t, "true");
+                        cmdArgs.Add(input.Substring(5), "");
+                    }
+                    else
+                    {
+                        var tokens = input.Substring(input.IndexOf(" ") + 2).Split(new string[] { " -" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var t in tokens)
+                        {
+                            if (t.Contains(' '))
+                                cmdArgs.Add(t.Substring(0, t.IndexOf(' ')).ToLower(), t.Substring(t.IndexOf(' ') + 1));
+                            else
+                                cmdArgs.Add(t, "true");
+                        }
                     }
                 }
                 catch { }
@@ -114,18 +134,25 @@ namespace IgniteCLI
 
         public static void Help()
         {
-            Out("HELP: cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
+            Out("HELP:");
+            Out("cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
             Break();
             foreach (var cmd in Commands)
             {
-                Out($"{cmd.Name} {cmd.Format()}", ConsoleColor.Green);
-                Out($"# {cmd.Description}", ConsoleColor.Cyan);
-                foreach (var arg in cmd.Args)
-                {
-                    Out($"| {arg.Tag} : {arg.Description}", ConsoleColor.DarkCyan);
-                }
+                Help(cmd);
+                Out();
             }
             Break();
+        }
+
+        private static void Help(Command cmd)
+        {
+            Out($"{cmd.Name} {cmd.Format()}", ConsoleColor.Green);
+            Out($"# {cmd.Description}", ConsoleColor.Cyan);
+            foreach (var arg in cmd.Args)
+            {
+                Out($"| {arg.Tag} : {arg.Description}", ConsoleColor.DarkCyan);
+            }
         }
 
         private static void Run(InputCommand cmd)
@@ -145,7 +172,8 @@ namespace IgniteCLI
             catch (Exception e)
             {
                 sw.Stop();
-                CLI.Out("ERROR: " + e.Message, ConsoleColor.Red);
+                CLI.Out(e.Message, ConsoleColor.Red);
+                CLI.Help();
             }
         }
 
