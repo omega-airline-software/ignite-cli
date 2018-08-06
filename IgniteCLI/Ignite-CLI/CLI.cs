@@ -114,8 +114,7 @@ namespace IgniteCLI
 
         public static void Help()
         {
-            Out("HELP:");
-            Out("cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
+            Out("HELP: cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
             Break();
             foreach (var cmd in Commands)
             {
@@ -125,7 +124,6 @@ namespace IgniteCLI
                 {
                     Out($"| {arg.Tag} : {arg.Description}", ConsoleColor.DarkCyan);
                 }
-                Out();
             }
             Break();
         }
@@ -147,8 +145,7 @@ namespace IgniteCLI
             catch (Exception e)
             {
                 sw.Stop();
-                CLI.Out(e.Message, ConsoleColor.Red);
-                CLI.Help();
+                CLI.Out("ERROR: " + e.Message, ConsoleColor.Red);
             }
         }
 
