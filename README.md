@@ -1,3 +1,4 @@
+![logo](https://raw.githubusercontent.com/omega-airline-software/ignite-cli/master/images/Icon.png)
 # Ignite CLI
 
 [Ignite](https://www.nuget.org/packages/IgniteCLI) is a library for creating CLI applications in .NET Core
