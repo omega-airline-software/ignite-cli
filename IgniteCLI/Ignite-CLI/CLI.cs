@@ -17,6 +17,7 @@ namespace IgniteCLI
         public static string String(Dictionary<string, string> d, string key) => d.ContainsKey(key.ToLower()) ? d[key.ToLower()] : null;
         public static int Int(Dictionary<string, string> d, string key) => Convert.ToInt32(CLI.String(d, key));
         public static bool Bool(Dictionary<string, string> d, string key) => d.ContainsKey(key.ToLower()) ? d[key.ToLower()] == "true" : false;
+        public static T ArgToEnum<T>(Dictionary<string, string> d, string key) => String(d, key).ToEnum<T>();
         #endregion
 
         private static CommandList Commands;
@@ -46,7 +47,7 @@ namespace IgniteCLI
         public static void Start(CommandList commands)
         {
             Commands = commands;
-            foreach(var cmd in DefaultCommands)
+            foreach (var cmd in DefaultCommands)
             {
                 if (!Commands.Any(x => x.Name == cmd.Name))
                     Commands.Insert(0, cmd);
@@ -114,7 +115,8 @@ namespace IgniteCLI
 
         public static void Help()
         {
-            Out("HELP: cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
+            Out("HELP:");
+            Out("cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
             Break();
             foreach (var cmd in Commands)
             {
@@ -124,6 +126,7 @@ namespace IgniteCLI
                 {
                     Out($"| {arg.Tag} : {arg.Description}", ConsoleColor.DarkCyan);
                 }
+                Out();
             }
             Break();
         }
@@ -145,7 +148,8 @@ namespace IgniteCLI
             catch (Exception e)
             {
                 sw.Stop();
-                CLI.Out("ERROR: " + e.Message, ConsoleColor.Red);
+                CLI.Out(e.Message, ConsoleColor.Red);
+                CLI.Help();
             }
         }
 
