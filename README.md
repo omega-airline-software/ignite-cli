@@ -7,7 +7,7 @@
 
 ## Overview
 
-Ignite helps you easily and quickly turn a Console App into a fully-fledged Command Line Interface. Just give it a list of Commands and run `CLI.Start()`. It will then take over the console, parsing user input automatically to trigger the right functions - and providing generated help documentation based on the Command definitions.
+Ignite helps you easily and quickly turn a Console App into a fully-fledged Command Line Interface. Just give it a list of Commands and run `CLI.Start()`. It will then take over the console, parsing user input automatically to trigger the right functions and also provide generated help documentation based on the Command definitions.
 
 ## Getting Started
 
