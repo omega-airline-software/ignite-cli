@@ -3,6 +3,8 @@
 
 [Ignite](https://www.nuget.org/packages/IgniteCLI) is a library for creating CLI applications in .NET Core
 
+*Contributions Welcome*
+
 ## Overview
 
 Ignite helps you easily and quickly turn a Console App into a fully-fledged Command Line Interface. When Ignite is given a list of Commands, setup is complete. It will then take over the console and parse user input automatically then trigger the given functions with the appropriate arguments.
