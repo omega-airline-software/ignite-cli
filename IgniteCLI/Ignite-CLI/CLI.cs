@@ -14,10 +14,10 @@ namespace IgniteCLI
     public class CLI
     {
         #region Convenience Functions
-        public static string String(Dictionary<string, string> d, string key) => d.ContainsKey(key.ToLower()) ? d[key.ToLower()] : null;
-        public static int Int(Dictionary<string, string> d, string key) => Convert.ToInt32(CLI.String(d, key));
-        public static bool Bool(Dictionary<string, string> d, string key) => d.ContainsKey(key.ToLower()) ? d[key.ToLower()] == "true" : false;
-        public static T ArgToEnum<T>(Dictionary<string, string> d, string key) => String(d, key).ToEnum<T>();
+        public static string StringArg(Dictionary<string, string> args, string key) => args.ContainsKey(key.ToLower()) ? args[key.ToLower()] : null;
+        public static int? IntArg(Dictionary<string, string> args, string key) => StringArg(args, key) != null ? Convert.ToInt32(StringArg(args, key)) : (int?)null;
+        public static bool BoolArg(Dictionary<string, string> args, string key) => args.ContainsKey(key.ToLower()) ? args[key.ToLower()].ToLower() == "true" : false;
+        public static T EnumArg<T>(Dictionary<string, string> args, string key) => StringArg(args, key).ToEnum<T>();
         #endregion
 
         private static CommandList Commands;
