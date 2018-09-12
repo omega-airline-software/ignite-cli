@@ -4,8 +4,8 @@ steps:
   args: ['build', '-c', 'Release'] # configured so dotnet build produces a .nupkg file
   dir: './IgniteCLI'
 
-
-- id: 'Push Nuget Package'
-  name: 'gcr.io/cloud-builders/dotnet'
-  args: ['nuget', 'push', 'IgniteCLI.1.0.2.nupkg', '-k', '${_API_KEY}', '-s', 'https://api.nuget.org/v3/index.json'] # ${_API_KEY} is a substitution variable configured on Cloud Build
-  dir: './IgniteCLI/Ignite-CLI/bin/Release'
+# GCP Cloud Build
+#- id: 'Push Nuget Package'
+#  name: 'gcr.io/cloud-builders/dotnet'
+#  args: ['nuget', 'push', 'IgniteCLI.1.0.2.nupkg', '-k', '${_API_KEY}', '-s', 'https://api.nuget.org/v3/index.json'] # ${_API_KEY} is a substitution variable configured on Cloud Build
+#  dir: './IgniteCLI/Ignite-CLI/bin/Release'
