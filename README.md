@@ -3,6 +3,8 @@
 
 [Ignite](https://www.nuget.org/packages/IgniteCLI) is a library for creating CLI applications in .NET Core
 
+![buildstatus](https://ames5.visualstudio.com/IgniteCLI/_apis/build/status/IgniteCLI-CI)
+
 *Contributions Welcome*
 
 ## Overview
