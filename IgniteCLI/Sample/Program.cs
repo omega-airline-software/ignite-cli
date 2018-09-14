@@ -23,7 +23,8 @@ namespace Sample
                     },
                     Function = args =>
                     {
-                        int x = 0;
+                        int[] i = new int[0];
+                        CLI.Out($"{i[1]}");
                     }
                 }
             });
