@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>Ignite_CLI</RootNamespace>
     <PackageId>IgniteCLI</PackageId>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <Authors></Authors>
     <Company>Omega Airline Software</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -13,8 +13,8 @@
     <PackageIconUrl></PackageIconUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/omega-airline-software/ignite-cli/master/LICENSE</PackageLicenseUrl>
     <PackageTags>CLI</PackageTags>
-    <AssemblyVersion>1.0.4.0</AssemblyVersion>
-    <FileVersion>1.0.4.0</FileVersion>
+    <AssemblyVersion>1.0.5.0</AssemblyVersion>
+    <FileVersion>1.0.5.0</FileVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
   
