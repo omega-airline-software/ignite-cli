@@ -8,7 +8,7 @@ namespace IgniteCLI
     {
         public Command this[string s]
         {
-            get { return this.FirstOrDefault(x => x.Name == s); }
+            get { return this.FirstOrDefault(x => x.Name == s || x.Aliases.Contains(s)); }
         }
     }
 
@@ -17,6 +17,7 @@ namespace IgniteCLI
         public delegate void CommandFunc(Dictionary<string, string> cmdArgs);
 
         public string Name;
+        public string[] Aliases;
         public string Description;
         public CommandArgs Args = new CommandArgs();
         public CommandFunc Function;
@@ -47,13 +48,14 @@ namespace IgniteCLI
     {
         public CommandArg this[string s]
         {
-            get { return this.FirstOrDefault(x => x.Tag == s); }
+            get { return this.FirstOrDefault(x => x.Tag == s || x.Aliases.Contains(s)); }
         }
     }
 
     public class CommandArg
     {
         public string Tag;
+        public string[] Aliases;
         public string Description;
         public string InputFormat;
         public bool Required = true;
