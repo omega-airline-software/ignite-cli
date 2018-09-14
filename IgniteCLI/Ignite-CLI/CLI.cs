@@ -14,9 +14,10 @@ namespace IgniteCLI
     public class CLI
     {
         #region Convenience Functions
-        public static string String(Dictionary<string, string> d, string key) => d.ContainsKey(key.ToLower()) ? d[key.ToLower()] : null;
-        public static int Int(Dictionary<string, string> d, string key) => Convert.ToInt32(CLI.String(d, key));
-        public static bool Bool(Dictionary<string, string> d, string key) => d.ContainsKey(key.ToLower()) ? d[key.ToLower()] == "true" : false;
+        public static string String(Dictionary<string, string> args, string key) => args.ContainsKey(key.ToLower()) ? args[key.ToLower()] : null;
+        public static int? Int(Dictionary<string, string> args, string key) => String(args, key) != null ? Convert.ToInt32(String(args, key)) : (int?)null;
+        public static bool Bool(Dictionary<string, string> args, string key) => args.ContainsKey(key.ToLower()) ? args[key.ToLower()].ToLower() == "true" : false;
+        public static T Enum<T>(Dictionary<string, string> args, string key) => String(args, key).ToEnum<T>();
         #endregion
 
         private static CommandList Commands;
@@ -28,7 +29,7 @@ namespace IgniteCLI
                 Description = "Displays examples for all available console colors",
                 Function = args =>
                 {
-                    var colors = Enum.GetValues(typeof(ConsoleColor)).Cast<ConsoleColor>();
+                    var colors = System.Enum.GetValues(typeof(ConsoleColor)).Cast<ConsoleColor>();
                     foreach (var c in colors)
                         CLI.Out(c.ToString(), c);
                     foreach (var c in colors)
@@ -71,13 +72,12 @@ namespace IgniteCLI
             var input = Console.ReadLine();
             while (input != "exit")
             {
-                InputCommand cmd = ParseInput(input);
-
                 if (input.Length != 0)
                 {
-                    Run(cmd);
+                    Run(input);
                     CLI.Out();
                 }
+
                 Console.Write("> ");
                 input = Console.ReadLine();
             }
@@ -108,7 +108,7 @@ namespace IgniteCLI
                         }
                     }
                 }
-                catch { }
+                catch { } //TODO: not this
             }
             else
             {
@@ -134,14 +134,15 @@ namespace IgniteCLI
 
         public static void Help()
         {
-            Out("HELP:");
-            Out("cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
+            Out("HELP: cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
             Break();
+
             foreach (var cmd in Commands)
             {
                 Help(cmd);
                 Out();
             }
+
             Break();
         }
 
@@ -173,7 +174,6 @@ namespace IgniteCLI
             {
                 sw.Stop();
                 CLI.Out(e.Message, ConsoleColor.Red);
-                CLI.Help();
             }
         }
 

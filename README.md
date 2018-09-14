@@ -3,9 +3,13 @@
 
 [Ignite](https://www.nuget.org/packages/IgniteCLI) is a library for creating CLI applications in .NET Core
 
+![buildstatus](https://ames5.visualstudio.com/IgniteCLI/_apis/build/status/IgniteCLI-CI)
+
+*Contributions Welcome*
+
 ## Overview
 
-Ignite helps you easily and quickly turn a Console App into a fully-fledged Command Line Interface. When Ignite is given a list of Commands, setup is complete. It will then take over the console and parse user input automatically then trigger the given functions with the appropriate arguments.
+Ignite helps you easily and quickly turn a Console App into a fully-fledged Command Line Interface. Just give it a list of Commands and run `CLI.Start()`. It will then take over the console, parsing user input automatically to trigger the right functions and also provide generated help documentation based on the Command definitions.
 
 ## Getting Started
 
@@ -64,11 +68,13 @@ Ignite lets you simulate user input for programmatic command execution
 
 During command functions, Ignite provides quick methods to automatically parse and convert arguments
 
--   `CLI.String(Dictionary<string, string> d, string key)`
+-   `CLI.StringArg(Dictionary<string, string> args, string key)`
     -   Parses the value from the `Dictionary<string, string>` as a String
--   `CLI.Int(Dictionary<string, string> d, string key)`
+-   `CLI.IntArg(Dictionary<string, string> args, string key)`
     -   Parses the value from the `Dictionary<string, string>` as a Int
--   `CLI.Bool(Dictionary<string, string> d, string key)`
+-   `CLI.EnumArg<T>(Dictionary<string, string> args, string key)`
+    -   Parses the value from the `Dictionary<string, string>` as a value for the given Enum `T`
+-   `CLI.BoolArg(Dictionary<string, string> args, string key)`
     -   Parses the value from the `Dictionary<string, string>` as a Bool
     -   "true" and "false" are evaluated appropriately
     -   When no value is given, it is evaluated as true
