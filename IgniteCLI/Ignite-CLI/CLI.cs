@@ -44,7 +44,7 @@ namespace IgniteCLI
                 {
                     if(args.Count > 0)
                     {
-                        var cmd = Commands.FirstOrDefault(x => x.Name.ToLower() == args.Keys.First());
+                        var cmd = Commands[args.Keys.First()];
                         if(cmd != null)
                         {
                             CLI.Help(cmd);
