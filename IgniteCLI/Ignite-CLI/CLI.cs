@@ -56,8 +56,16 @@ namespace IgniteCLI
                 {
                     if (args.Count > 0)
                     {
-                        var cmd = Commands.FirstOrDefault(x => x.Name.ToLower() == args.Keys.First());
-                        if (cmd != null)
+                        var input = args.Keys.First();
+                        var cmd = Commands[input];
+                        if (cmd == null)
+                        {
+                            var top3 = FuzzyCommandSearch(input).Take(3);
+                            foreach (var c in top3)
+                                Help(c);
+                            return;
+                        }
+                        else
                         {
                             CLI.Help(cmd);
                             return;
@@ -181,6 +189,13 @@ namespace IgniteCLI
         }
         #endregion
 
+        /// <summary>
+        /// A list of all Commands, ordered by similarity to the input string
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        private static IOrderedEnumerable<Command> FuzzyCommandSearch(string cmd) => Commands.OrderBy(x => cmd.ToLower().DistanceFrom(x.Name.ToLower()));
+
         #region Run
 
         private static void Run(InputCommand cmd)
@@ -188,7 +203,7 @@ namespace IgniteCLI
             Command exec = Commands[cmd.Name.ToLower()];
             if (exec == null)
             {
-                var suggestedCommand = Commands.OrderBy(x => cmd.Name.ToLower().DistanceFrom(x.Name.ToLower())).FirstOrDefault();
+                var suggestedCommand = FuzzyCommandSearch(cmd.Name).FirstOrDefault();
                 if (suggestedCommand != null)
                 {
                     CLI.Out("Did you mean ");
@@ -199,7 +214,7 @@ namespace IgniteCLI
                     foreach (var a in cmd.Arguments)
                         args.Append($"-{a.Key} {a.Value} ");
                     if (cmd.Arguments.Count > 0) args.Remove(args.Length - 1, 1);
-                    
+
                     CLI.Out(args.ToString(), ConsoleColor.DarkCyan);
                     CLI.Line("? [Y/n]");
 
