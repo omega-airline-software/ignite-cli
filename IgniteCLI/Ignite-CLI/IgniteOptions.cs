@@ -7,5 +7,6 @@ namespace IgniteCLI
     public class IgniteOptions
     {
         public bool EnableColorsCommand = true;
+        public bool EnableExitCommand = false;
     }
 }

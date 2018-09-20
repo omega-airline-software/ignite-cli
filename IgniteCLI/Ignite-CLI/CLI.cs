@@ -6,12 +6,6 @@ using System.Text;
 
 namespace IgniteCLI
 {
-    class InputCommand
-    {
-        public string Name;
-        public Dictionary<string, string> Arguments;
-    }
-
     public class CLI
     {
         #region Convenience Functions
@@ -29,20 +23,13 @@ namespace IgniteCLI
 
         public static void Start(CommandList commands)
         {
-            Initialize();
-
-            Commands = commands;
-            foreach (var cmd in DefaultCommands)
-            {
-                if (!Commands.Any(x => x.Name == cmd.Name))
-                    Commands.Insert(0, cmd);
-            }
-
+            Initialize(commands);
+            
             Console.OutputEncoding = System.Text.Encoding.Unicode;
-            Console.Write("> ");
+            CLI.Out("> ");
 
             var input = Console.ReadLine();
-            while (input != "exit" && !Stopped)
+            while (!Stopped)
             {
                 if (input.Length != 0)
                 {
@@ -55,7 +42,7 @@ namespace IgniteCLI
             }
         }
 
-        private static void Initialize()
+        private static void Initialize(CommandList commands)
         {
             Stopped = false;
 
@@ -80,7 +67,6 @@ namespace IgniteCLI
                     CLI.Help();
                 }
             });
-
             if (Options.EnableColorsCommand)
                 DefaultCommands.Add(new Command
                 {
@@ -95,7 +81,22 @@ namespace IgniteCLI
                             CLI.Line(c.ToString(), ConsoleColor.Gray, c);
                     }
                 });
+            if (Options.EnableExitCommand)
+                DefaultCommands.Add(new Command
+                {
+                    Name = "exit",
+                    Function = args => { CLI.Stop(); }
+                });
+
+            Commands = commands;
+            foreach (var cmd in DefaultCommands)
+            {
+                if (!Commands.Any(x => x.Name == cmd.Name))
+                    Commands.Insert(0, cmd);
+            }
         }
+
+        public static void Stop() => Stopped = true;
 
         private static InputCommand ParseInput(string input)
         {
@@ -181,40 +182,29 @@ namespace IgniteCLI
         #endregion
 
         #region Run
-        /// <summary>
-        /// fuzzy search
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        private static Command MostSimilarCommand(string name) => Commands.OrderBy(x => name.ToLower().DistanceFrom(x.Name.ToLower())).FirstOrDefault();
 
         private static void Run(InputCommand cmd)
         {
             Command exec = Commands[cmd.Name.ToLower()];
             if (exec == null)
             {
-                var suggestedCommand = MostSimilarCommand(cmd.Name);
+                var suggestedCommand = Commands.OrderBy(x => cmd.Name.ToLower().DistanceFrom(x.Name.ToLower())).FirstOrDefault();
                 if (suggestedCommand != null)
                 {
-                    Console.Write("Did you mean ");
-
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.Write(suggestedCommand.Name);
-                    if (cmd.Arguments.Count > 0) Console.Write(" ");
+                    CLI.Out("Did you mean ");
+                    CLI.Out(suggestedCommand.Name, ConsoleColor.Cyan);
+                    if (cmd.Arguments.Count > 0) CLI.Out(" ");
 
                     StringBuilder args = new StringBuilder();
                     foreach (var a in cmd.Arguments)
                         args.Append($"-{a.Key} {a.Value} ");
                     if (cmd.Arguments.Count > 0) args.Remove(args.Length - 1, 1);
+                    
+                    CLI.Out(args.ToString(), ConsoleColor.DarkCyan);
+                    CLI.Line("? [Y/n]");
 
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.Write(args);
-
-                    Console.ResetColor();
-                    Console.WriteLine("? [Y/n]");
-
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.Write("> ");
+                    Console.ForegroundColor = ConsoleColor.Cyan; //not using CLI.Out(ConsoleColor) because I want the user input to also be Cyan
+                    CLI.Out("> ");
                     exec = Console.ReadLine() == "Y" ? suggestedCommand : Commands["help"];
                     Console.ResetColor();
                 }
@@ -224,9 +214,11 @@ namespace IgniteCLI
             var missingRequiredArgs = exec.RequiredArgs.Select(x => x.Tag).Where(x => cmd.Arguments.ContainsKey(x)).ToList();
             if (missingRequiredArgs.Count > 0)
             {
+                if(cmd.Arguments.Count > 0)
+                {
 
-
-                exec = Commands["help"];
+                }
+                else exec = Commands["help"];
             }
 
             Stopwatch sw = new Stopwatch();

@@ -60,4 +60,9 @@ namespace IgniteCLI
         public string InputFormat;
         public bool Required = true;
     }
+    class InputCommand
+    {
+        public string Name;
+        public Dictionary<string, string> Arguments;
+    }
 }
