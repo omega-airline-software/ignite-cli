@@ -20,47 +20,16 @@ namespace IgniteCLI
         public static T Enum<T>(Dictionary<string, string> args, string key) => String(args, key).ToEnum<T>();
         #endregion
 
+        public static IgniteOptions Options = new IgniteOptions();
+
         private static bool Stopped = false;
         private static CommandList Commands;
-        private static readonly CommandList DefaultCommands = new CommandList
-        {
-            new Command
-            {
-                Name = "colors",
-                Description = "Displays examples for all available console colors",
-                Function = args =>
-                {
-                    var colors = System.Enum.GetValues(typeof(ConsoleColor)).Cast<ConsoleColor>();
-                    foreach (var c in colors)
-                        CLI.Out(c.ToString(), c);
-                    foreach (var c in colors)
-                        CLI.Out(c.ToString(), ConsoleColor.Gray, c);
-                }
-            },
-            new Command
-            {
-                Name = "help",
-                Description = "Shows this list of commands",
-                Function = args =>
-                {
-                    if(args.Count > 0)
-                    {
-                        var cmd = Commands[args.Keys.First()];
-                        if(cmd != null)
-                        {
-                            CLI.Help(cmd);
-                            return;
-                        }
-                    }
-
-                    CLI.Help();
-                }
-            },
-        };
+        private static CommandList DefaultCommands = new CommandList();
 
         public static void Start(CommandList commands)
         {
-            Stopped = false;
+            Initialize();
+
             Commands = commands;
             foreach (var cmd in DefaultCommands)
             {
@@ -85,7 +54,34 @@ namespace IgniteCLI
             }
         }
 
-        public static void Stop() => Stopped = true;
+        private static void Initialize()
+        {
+            Stopped = false;
+
+            //core logic requires "help" command always existing, need to make this not true in order to provide an option to remove the help command
+            //all DefaultCommands are overrideable by regular Commands still, though.
+            DefaultCommands.Add(new Command
+            {
+                Name = "help",
+                Description = "Shows this list of commands",
+                Function = args => { CLI.Help(); }
+            });
+
+            if (Options.EnableColorsCommand)
+                DefaultCommands.Add(new Command
+                {
+                    Name = "colors",
+                    Description = "Displays examples for all available console colors",
+                    Function = args =>
+                    {
+                        var colors = System.Enum.GetValues(typeof(ConsoleColor)).Cast<ConsoleColor>();
+                        foreach (var c in colors)
+                            CLI.Out(c.ToString(), c);
+                        foreach (var c in colors)
+                            CLI.Out(c.ToString(), ConsoleColor.Gray, c);
+                    }
+                });
+        }
 
         private static InputCommand ParseInput(string input)
         {

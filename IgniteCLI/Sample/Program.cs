@@ -7,6 +7,7 @@ namespace Sample
     {
         static void Main(string[] a)
         {
+            CLI.Options.EnableColorsCommand = false;
             CLI.Start(new CommandList
             {
                 new Command
