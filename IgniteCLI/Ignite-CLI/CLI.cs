@@ -46,7 +46,7 @@ namespace IgniteCLI
                 if (input.Length != 0)
                 {
                     Run(input);
-                    CLI.Out();
+                    CLI.Line();
                 }
 
                 Console.Write("> ");
@@ -76,9 +76,9 @@ namespace IgniteCLI
                     {
                         var colors = System.Enum.GetValues(typeof(ConsoleColor)).Cast<ConsoleColor>();
                         foreach (var c in colors)
-                            CLI.Out(c.ToString(), c);
+                            CLI.Line(c.ToString(), c);
                         foreach (var c in colors)
-                            CLI.Out(c.ToString(), ConsoleColor.Gray, c);
+                            CLI.Line(c.ToString(), ConsoleColor.Gray, c);
                     }
                 });
         }
@@ -122,8 +122,14 @@ namespace IgniteCLI
             };
         }
 
-        public static void Break() => Out("-----------------------------------------------------", ConsoleColor.Green);
-        public static void Out(string s = "") => Console.WriteLine(s);
+        public static void Break() => Line("-----------------------------------------------------", ConsoleColor.Green);
+        public static void Line(string s = "") => Console.WriteLine(s);
+        public static void Line(string s, ConsoleColor fore, ConsoleColor back = ConsoleColor.Black)
+        {
+            Out(s, fore, back);
+            Line();
+        }
+        public static void Out(string s = "") => Console.Write(s);
         public static void Out(string s, ConsoleColor fore, ConsoleColor back = ConsoleColor.Black)
         {
             Console.ForegroundColor = fore;
@@ -134,13 +140,13 @@ namespace IgniteCLI
 
         public static void Help()
         {
-            Out("HELP: cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
+            Line("HELP: cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
             Break();
 
             foreach (var cmd in Commands)
             {
                 Help(cmd);
-                Out();
+                Line();
             }
 
             Break();
@@ -148,11 +154,11 @@ namespace IgniteCLI
 
         private static void Help(Command cmd)
         {
-            Out($"{cmd.Name} {cmd.Format()}", ConsoleColor.Green);
-            Out($"# {cmd.Description}", ConsoleColor.Cyan);
+            Line($"{cmd.Name} {cmd.Format()}", ConsoleColor.Green);
+            Line($"# {cmd.Description}", ConsoleColor.Cyan);
             foreach (var arg in cmd.Args)
             {
-                Out($"| {arg.Tag} : {arg.Description}", ConsoleColor.DarkCyan);
+                Line($"| {arg.Tag} : {arg.Description}", ConsoleColor.DarkCyan);
             }
         }
 
@@ -168,12 +174,12 @@ namespace IgniteCLI
             {
                 exec.Function.Invoke(cmd.Arguments);
                 sw.Stop();
-                CLI.Out(sw.ElapsedMilliseconds + "ms");
+                CLI.Line(sw.ElapsedMilliseconds + "ms");
             }
             catch (Exception e)
             {
                 sw.Stop();
-                CLI.Out(e.Message, ConsoleColor.Red);
+                CLI.Line(e.Message, ConsoleColor.Red);
             }
         }
 
