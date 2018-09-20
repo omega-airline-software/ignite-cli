@@ -7,7 +7,6 @@ namespace Sample
     {
         static void Main(string[] a)
         {
-            CLI.Options.EnableColorsCommand = false;
             CLI.Start(new CommandList
             {
                 new Command
@@ -25,7 +24,7 @@ namespace Sample
                     Function = args =>
                     {
                         int[] i = new int[0];
-                        CLI.Out($"{i[1]}");
+                        CLI.Line($"{i[1]}");
                     }
                 }
             });
