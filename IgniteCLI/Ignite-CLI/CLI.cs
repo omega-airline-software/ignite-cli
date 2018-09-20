@@ -215,9 +215,10 @@ namespace IgniteCLI
                     
                     foreach (var a in cmd.Arguments)
                         CLI.Out($"-{a.Key} {a.Value} ", ConsoleColor.DarkCyan);
-                    CLI.Line("? [Y/n]");
+                    CLI.Out("? ");
+                    CLI.Line("[Y/n]", ConsoleColor.Green);
 
-                    Console.ForegroundColor = ConsoleColor.Cyan; //not using CLI.Out(ConsoleColor) because I want the user input to also be Cyan
+                    Console.ForegroundColor = ConsoleColor.Green; //not using CLI.Out(ConsoleColor) because I want the user input to also be Cyan
                     CLI.Out(InputPrefix);
 
                     if (Console.ReadLine() == "Y") exec = suggestedCommand;
@@ -265,9 +266,10 @@ namespace IgniteCLI
                         CLI.Out($"-{n.Suggestion.Tag} {n.Original.Value} ", ConsoleColor.Cyan);
                     foreach (var e in existentArgs)
                         CLI.Out($"-{e.Key} {e.Value} ", ConsoleColor.DarkCyan);
-                    CLI.Line("? [Y/n]");
+                    CLI.Out("? ");
+                    CLI.Line("[Y/n]", ConsoleColor.Green);
 
-                    Console.ForegroundColor = ConsoleColor.Cyan; //not using CLI.Out(ConsoleColor) because I want the user input to also be Cyan
+                    Console.ForegroundColor = ConsoleColor.Green; //not using CLI.Out(ConsoleColor) because I want the user input to also be Cyan
                     CLI.Out(InputPrefix);
                     if (Console.ReadLine() == "Y")
                     {
