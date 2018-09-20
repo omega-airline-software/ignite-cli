@@ -20,6 +20,7 @@ namespace IgniteCLI
         public static T Enum<T>(Dictionary<string, string> args, string key) => String(args, key).ToEnum<T>();
         #endregion
 
+        private static bool Stopped = false;
         private static CommandList Commands;
         private static readonly CommandList DefaultCommands = new CommandList
         {
@@ -59,6 +60,7 @@ namespace IgniteCLI
 
         public static void Start(CommandList commands)
         {
+            Stopped = false;
             Commands = commands;
             foreach (var cmd in DefaultCommands)
             {
@@ -70,7 +72,7 @@ namespace IgniteCLI
             Console.Write("> ");
 
             var input = Console.ReadLine();
-            while (input != "exit")
+            while (input != "exit" && !Stopped)
             {
                 if (input.Length != 0)
                 {
@@ -82,6 +84,8 @@ namespace IgniteCLI
                 input = Console.ReadLine();
             }
         }
+
+        public static void Stop() => Stopped = true;
 
         private static InputCommand ParseInput(string input)
         {
