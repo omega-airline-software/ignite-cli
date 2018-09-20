@@ -21,7 +21,8 @@ namespace IgniteCLI
         #endregion
 
         public static IgniteOptions Options = new IgniteOptions();
-        
+
+        private static bool Stopped = false;
         private static CommandList Commands;
         private static CommandList DefaultCommands = new CommandList();
 
@@ -40,7 +41,7 @@ namespace IgniteCLI
             Console.Write("> ");
 
             var input = Console.ReadLine();
-            while (input != "exit")
+            while (input != "exit" && !Stopped)
             {
                 if (input.Length != 0)
                 {
@@ -55,6 +56,8 @@ namespace IgniteCLI
 
         private static void Initialize()
         {
+            Stopped = false;
+
             //core logic requires "help" command always existing, need to make this not true in order to provide an option to remove the help command
             //all DefaultCommands are overrideable by regular Commands still, though.
             DefaultCommands.Add(new Command
