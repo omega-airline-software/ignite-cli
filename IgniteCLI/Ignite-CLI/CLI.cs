@@ -21,12 +21,14 @@ namespace IgniteCLI
         private static CommandList Commands;
         private static CommandList DefaultCommands = new CommandList();
 
+        private static string InputPrefix = "> ";
+
         public static void Start(CommandList commands)
         {
             Initialize(commands);
             
             Console.OutputEncoding = System.Text.Encoding.Unicode;
-            CLI.Out("> ");
+            CLI.Out(InputPrefix);
 
             var input = Console.ReadLine();
             while (!Stopped)
@@ -37,7 +39,7 @@ namespace IgniteCLI
                     CLI.Line();
                 }
 
-                Console.Write("> ");
+                Console.Write(InputPrefix);
                 input = Console.ReadLine();
             }
         }
@@ -203,38 +205,86 @@ namespace IgniteCLI
             Command exec = Commands[cmd.Name.ToLower()];
             if (exec == null)
             {
+                //fuzzy command suggestions
                 var suggestedCommand = FuzzyCommandSearch(cmd.Name).FirstOrDefault();
                 if (suggestedCommand != null)
                 {
                     CLI.Out("Did you mean ");
                     CLI.Out(suggestedCommand.Name, ConsoleColor.Cyan);
                     if (cmd.Arguments.Count > 0) CLI.Out(" ");
-
-                    StringBuilder args = new StringBuilder();
+                    
                     foreach (var a in cmd.Arguments)
-                        args.Append($"-{a.Key} {a.Value} ");
-                    if (cmd.Arguments.Count > 0) args.Remove(args.Length - 1, 1);
-
-                    CLI.Out(args.ToString(), ConsoleColor.DarkCyan);
+                        CLI.Out($"-{a.Key} {a.Value} ", ConsoleColor.DarkCyan);
                     CLI.Line("? [Y/n]");
 
                     Console.ForegroundColor = ConsoleColor.Cyan; //not using CLI.Out(ConsoleColor) because I want the user input to also be Cyan
-                    CLI.Out("> ");
-                    exec = Console.ReadLine() == "Y" ? suggestedCommand : Commands["help"];
+                    CLI.Out(InputPrefix);
+
+                    if (Console.ReadLine() == "Y") exec = suggestedCommand;
+                    else exec = Commands["help"];
+
                     Console.ResetColor();
                 }
                 else exec = Commands["help"];
             }
 
-            var missingRequiredArgs = exec.RequiredArgs.Select(x => x.Tag).Where(x => cmd.Arguments.ContainsKey(x)).ToList();
+            var missingRequiredArgs = exec.RequiredArgs.Select(x => x.Tag.ToLower()).Where(x => !cmd.Arguments.ContainsKey(x.ToLower())).ToList();
             if (missingRequiredArgs.Count > 0)
             {
+                //fuzzy argument suggestions
                 if(cmd.Arguments.Count > 0)
                 {
+                    CLI.Out("Did you mean ");
+                    CLI.Out(exec.Name + " ", ConsoleColor.DarkCyan);
 
+                    //input arguments that don't exist in the Command definition, mapped to include suggested alternatives
+                    var nonexistentArgs =
+                        cmd.Arguments
+                            .Where(x =>
+                                !exec.RequiredArgs
+                                    .Select(y => y.Tag.ToLower())
+                                    .Contains(x.Key.ToLower())
+                                )
+                            .Select(x => new
+                                {
+                                    Original = x,
+                                    Suggestion = exec.RequiredArgs.OrderBy(y => y.Tag.ToLower().DistanceFrom(x.Key.ToLower())).First()
+                                })
+                        .ToList();
+
+                    //input arguments that do exist in the Command definition
+                    var existentArgs =
+                        cmd.Arguments
+                            .Where(x =>
+                                exec.RequiredArgs
+                                    .Select(y => y.Tag.ToLower())
+                                    .Contains(x.Key.ToLower())
+                                );
+
+                    foreach (var n in nonexistentArgs)
+                        CLI.Out($"-{n.Suggestion.Tag} {n.Original.Value} ", ConsoleColor.Cyan);
+                    foreach (var e in existentArgs)
+                        CLI.Out($"-{e.Key} {e.Value} ", ConsoleColor.DarkCyan);
+                    CLI.Line("? [Y/n]");
+
+                    Console.ForegroundColor = ConsoleColor.Cyan; //not using CLI.Out(ConsoleColor) because I want the user input to also be Cyan
+                    CLI.Out(InputPrefix);
+                    if (Console.ReadLine() == "Y")
+                    {
+                        foreach (var arg in nonexistentArgs)
+                        {
+                            var inArg = cmd.Arguments.First(x => x.Key == arg.Original.Key);
+                            cmd.Arguments.Remove(inArg.Key);
+                            cmd.Arguments.Add(arg.Suggestion.Tag, inArg.Value);
+                        }
+                    }
+                    else exec = Commands["help"];
+
+                    Console.ResetColor();
                 }
                 else exec = Commands["help"];
             }
+
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
