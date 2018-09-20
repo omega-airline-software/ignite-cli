@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 
 namespace IgniteCLI
 {
@@ -122,25 +123,28 @@ namespace IgniteCLI
             };
         }
 
-        public static void Break() => Out("-----------------------------------------------------", ConsoleColor.Green);
+        #region Output
+        public static void Break() => CLI.Out("-----------------------------------------------------", ConsoleColor.Green);
         public static void Out(string s = "") => Console.WriteLine(s);
         public static void Out(string s, ConsoleColor fore, ConsoleColor back = ConsoleColor.Black)
         {
             Console.ForegroundColor = fore;
             Console.BackgroundColor = back;
-            Out(s);
+            CLI.Out(s);
             Console.ResetColor();
         }
+        #endregion
 
+        #region Help
         public static void Help()
         {
-            Out("HELP: cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
+            CLI.Out("HELP: cmd -arg [value] {-optionalArg [optional value]} {-optionalBool}");
             Break();
 
             foreach (var cmd in Commands)
             {
                 Help(cmd);
-                Out();
+                CLI.Out();
             }
 
             Break();
@@ -148,19 +152,63 @@ namespace IgniteCLI
 
         private static void Help(Command cmd)
         {
-            Out($"{cmd.Name} {cmd.Format()}", ConsoleColor.Green);
-            Out($"# {cmd.Description}", ConsoleColor.Cyan);
+            CLI.Out($"{cmd.Name} {cmd.Format()}", ConsoleColor.Green);
+            CLI.Out($"# {cmd.Description}", ConsoleColor.Cyan);
             foreach (var arg in cmd.Args)
             {
-                Out($"| {arg.Tag} : {arg.Description}", ConsoleColor.DarkCyan);
+                CLI.Out($"| {arg.Tag} : {arg.Description}", ConsoleColor.DarkCyan);
             }
         }
+        #endregion
+
+        #region Run
+        /// <summary>
+        /// fuzzy search
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private static Command MostSimilarCommand(string name) => Commands.OrderBy(x => name.ToLower().DistanceFrom(x.Name.ToLower())).FirstOrDefault();
 
         private static void Run(InputCommand cmd)
         {
-            Command exec = Commands[cmd.Name.ToLower()] ?? Commands["help"];
-            if (!exec.RequiredArgs.Select(x => x.Tag).All(x => cmd.Arguments.ContainsKey(x)))
+            Command exec = Commands[cmd.Name.ToLower()];
+            if (exec == null)
+            {
+                var suggestedCommand = MostSimilarCommand(cmd.Name);
+                if (suggestedCommand != null)
+                {
+                    Console.Write("Did you mean ");
+
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write(suggestedCommand.Name);
+                    if (cmd.Arguments.Count > 0) Console.Write(" ");
+
+                    StringBuilder args = new StringBuilder();
+                    foreach (var a in cmd.Arguments)
+                        args.Append($"-{a.Key} {a.Value} ");
+                    if (cmd.Arguments.Count > 0) args.Remove(args.Length - 1, 1);
+
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.Write(args);
+
+                    Console.ResetColor();
+                    Console.WriteLine("? [Y/n]");
+
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write("> ");
+                    exec = Console.ReadLine() == "Y" ? suggestedCommand : Commands["help"];
+                    Console.ResetColor();
+                }
+                else exec = Commands["help"];
+            }
+
+            var missingRequiredArgs = exec.RequiredArgs.Select(x => x.Tag).Where(x => cmd.Arguments.ContainsKey(x)).ToList();
+            if (missingRequiredArgs.Count > 0)
+            {
+
+
                 exec = Commands["help"];
+            }
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -177,8 +225,18 @@ namespace IgniteCLI
             }
         }
 
+        /// <summary>
+        /// Parse raw input and execute it
+        /// </summary>
+        /// <param name="input"></param>
         public static void Run(string input) => CLI.Run(ParseInput(input));
 
+        /// <summary>
+        /// Execute a command with arguments. Example: CLI.Run("mycmd", "arg1 val1", "arg2 val2"); or CLI.Run("mycmd", new string[] { "arg1 val1", "arg2 val2" });
+        /// This is useful for dynamic command execution
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
         public static void Run(string command, params string[] args)
         {
             Dictionary<string, string> arguments = new Dictionary<string, string>();
@@ -190,6 +248,11 @@ namespace IgniteCLI
             Run(new InputCommand { Name = command, Arguments = arguments });
         }
 
+        /// <summary>
+        /// Execute raw input separated into arguments. Example: CLI.Run("mycmd", "arg1 val1", "arg2 val2"); or CLI.Run(new string[] { "mycmd", "arg1 val1", "arg2 val2" });
+        /// This is useful for different patterns of dynamic command execution than Run(string command, params string[] args)
+        /// </summary>
+        /// <param name="input"></param>
         public static void Run(params string[] input)
         {
             string command = input[0];
@@ -197,5 +260,6 @@ namespace IgniteCLI
             Array.Copy(input, 1, realArgs, 0, realArgs.Length);
             CLI.Run(command, realArgs);
         }
+        #endregion
     }
 }
