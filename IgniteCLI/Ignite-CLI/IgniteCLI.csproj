@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RootNamespace>Ignite_CLI</RootNamespace>
+    <RootNamespace>IgniteCLI</RootNamespace>
     <PackageId>IgniteCLI</PackageId>
     <Version>1.0.4</Version>
     <Authors></Authors>

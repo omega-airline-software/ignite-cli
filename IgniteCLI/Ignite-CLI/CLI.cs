@@ -20,32 +20,15 @@ namespace IgniteCLI
         public static T Enum<T>(Dictionary<string, string> args, string key) => String(args, key).ToEnum<T>();
         #endregion
 
+        public static IgniteOptions Options = new IgniteOptions();
+
         private static CommandList Commands;
-        private static CommandList DefaultCommands = new CommandList
-        {
-            new Command
-            {
-                Name = "colors",
-                Description = "Displays examples for all available console colors",
-                Function = args =>
-                {
-                    var colors = System.Enum.GetValues(typeof(ConsoleColor)).Cast<ConsoleColor>();
-                    foreach (var c in colors)
-                        CLI.Out(c.ToString(), c);
-                    foreach (var c in colors)
-                        CLI.Out(c.ToString(), ConsoleColor.Gray, c);
-                }
-            },
-            new Command
-            {
-                Name = "help",
-                Description = "Shows this list of commands",
-                Function = args => { CLI.Help(); }
-            },
-        };
+        private static CommandList DefaultCommands = new CommandList();
 
         public static void Start(CommandList commands)
         {
+            Initialize();
+
             Commands = commands;
             foreach (var cmd in DefaultCommands)
             {
@@ -67,6 +50,34 @@ namespace IgniteCLI
 
                 Console.Write("> ");
                 input = Console.ReadLine();
+            }
+        }
+
+        private static void Initialize()
+        {
+            if (Options.EnableDefaultCommands)
+            {
+                if (Options.EnableColorsCommand)
+                    DefaultCommands.Add(new Command
+                    {
+                        Name = "colors",
+                        Description = "Displays examples for all available console colors",
+                        Function = args =>
+                        {
+                            var colors = System.Enum.GetValues(typeof(ConsoleColor)).Cast<ConsoleColor>();
+                            foreach (var c in colors)
+                                CLI.Out(c.ToString(), c);
+                            foreach (var c in colors)
+                                CLI.Out(c.ToString(), ConsoleColor.Gray, c);
+                        }
+                    });
+                if (Options.EnableHelpCommand)
+                    DefaultCommands.Add(new Command
+                    {
+                        Name = "help",
+                        Description = "Shows this list of commands",
+                        Function = args => { CLI.Help(); }
+                    });
             }
         }
 
