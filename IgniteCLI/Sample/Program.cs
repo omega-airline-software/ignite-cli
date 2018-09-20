@@ -24,7 +24,7 @@ namespace Sample
                     Function = args =>
                     {
                         int[] i = new int[0];
-                        CLI.Out($"{i[1]}");
+                        CLI.Line($"{i[1]}");
                     }
                 }
             });
