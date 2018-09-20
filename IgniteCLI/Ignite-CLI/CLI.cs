@@ -21,7 +21,7 @@ namespace IgniteCLI
         #endregion
 
         public static IgniteOptions Options = new IgniteOptions();
-
+        
         private static CommandList Commands;
         private static CommandList DefaultCommands = new CommandList();
 
@@ -55,30 +55,29 @@ namespace IgniteCLI
 
         private static void Initialize()
         {
-            if (Options.EnableDefaultCommands)
+            //core logic requires "help" command always existing, need to make this not true in order to provide an option to remove the help command
+            //all DefaultCommands are overrideable by regular Commands still, though.
+            DefaultCommands.Add(new Command
             {
-                if (Options.EnableColorsCommand)
-                    DefaultCommands.Add(new Command
+                Name = "help",
+                Description = "Shows this list of commands",
+                Function = args => { CLI.Help(); }
+            });
+
+            if (Options.EnableColorsCommand)
+                DefaultCommands.Add(new Command
+                {
+                    Name = "colors",
+                    Description = "Displays examples for all available console colors",
+                    Function = args =>
                     {
-                        Name = "colors",
-                        Description = "Displays examples for all available console colors",
-                        Function = args =>
-                        {
-                            var colors = System.Enum.GetValues(typeof(ConsoleColor)).Cast<ConsoleColor>();
-                            foreach (var c in colors)
-                                CLI.Out(c.ToString(), c);
-                            foreach (var c in colors)
-                                CLI.Out(c.ToString(), ConsoleColor.Gray, c);
-                        }
-                    });
-                if (Options.EnableHelpCommand)
-                    DefaultCommands.Add(new Command
-                    {
-                        Name = "help",
-                        Description = "Shows this list of commands",
-                        Function = args => { CLI.Help(); }
-                    });
-            }
+                        var colors = System.Enum.GetValues(typeof(ConsoleColor)).Cast<ConsoleColor>();
+                        foreach (var c in colors)
+                            CLI.Out(c.ToString(), c);
+                        foreach (var c in colors)
+                            CLI.Out(c.ToString(), ConsoleColor.Gray, c);
+                    }
+                });
         }
 
         private static InputCommand ParseInput(string input)

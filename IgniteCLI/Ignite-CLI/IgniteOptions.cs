@@ -6,8 +6,6 @@ namespace IgniteCLI
 {
     public class IgniteOptions
     {
-        public bool EnableDefaultCommands = true;
         public bool EnableColorsCommand = true;
-        public bool EnableHelpCommand = true;
     }
 }
