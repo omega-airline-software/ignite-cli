@@ -68,13 +68,13 @@ Ignite lets you simulate user input for programmatic command execution
 
 During command functions, Ignite provides quick methods to automatically parse and convert arguments
 
--   `CLI.StringArg(Dictionary<string, string> args, string key)`
+-   `CLI.String(Dictionary<string, string> args, string key)`
     -   Parses the value from the `Dictionary<string, string>` as a String
--   `CLI.IntArg(Dictionary<string, string> args, string key)`
+-   `CLI.Int(Dictionary<string, string> args, string key)`
     -   Parses the value from the `Dictionary<string, string>` as a Int
--   `CLI.EnumArg<T>(Dictionary<string, string> args, string key)`
+-   `CLI.Enum<T>(Dictionary<string, string> args, string key)`
     -   Parses the value from the `Dictionary<string, string>` as a value for the given Enum `T`
--   `CLI.BoolArg(Dictionary<string, string> args, string key)`
+-   `CLI.Bool(Dictionary<string, string> args, string key)`
     -   Parses the value from the `Dictionary<string, string>` as a Bool
     -   "true" and "false" are evaluated appropriately
     -   When no value is given, it is evaluated as true
