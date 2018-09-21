@@ -8,7 +8,7 @@ namespace IgniteCLI
     {
         public Command this[string s]
         {
-            get { return this.FirstOrDefault(x => x.Name.ToLower() == s || x.Aliases.Select(y => y.ToLower()).Contains(s)); }
+            get { return this.FirstOrDefault(x => x.Name.ToLower() == s.ToLower() || x.Aliases.Select(y => y.ToLower()).Contains(s.ToLower())); }
         }
     }
 
@@ -59,5 +59,10 @@ namespace IgniteCLI
         public string Description;
         public string InputFormat;
         public bool Required = true;
+    }
+    class InputCommand
+    {
+        public string Name;
+        public Dictionary<string, string> Arguments;
     }
 }

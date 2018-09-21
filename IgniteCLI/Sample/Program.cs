@@ -16,13 +16,20 @@ namespace Sample
                     {
                         new CommandArg
                         {
-                            Tag = "arg",
+                            Tag = "aa",
                             InputFormat = "value",
-                            Required = false,
+                            Required = true,
+                        },
+                        new CommandArg
+                        {
+                            Tag = "bb",
+                            Required = true
                         },
                     },
                     Function = args =>
                     {
+                        CLI.Line(CLI.String(args, "aa"));
+                        CLI.Line(CLI.String(args, "bb"));
                         int[] i = new int[0];
                         CLI.Line($"{i[1]}");
                     }
