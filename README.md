@@ -15,8 +15,8 @@ Ignite helps you easily and quickly turn a Console App into a fully-fledged Comm
 
 1.  Create a new .NET Console App (.NET Core 2.0) project
 2.  Follow Installation
-3.  Declare and define a `CommandList`
-4.  Run `CLI.Start(MyCommandList)` in the `static void Main(string[] args)` method that's provided with Console Apps
+3.  Declare and define a `Commands`
+4.  Run `CLI.Start(MyCommands)` in the `static void Main(string[] args)` method that's provided with Console Apps
 
 ## Installation
 
@@ -32,15 +32,15 @@ Install-Package IgniteCLI
 
 ## API
 
--   `CLI.Start(CommandList commands)`
-    -   This method is what initializes Ignite with the given `CommandList`
+-   `CLI.Start(Commands commands)`
+    -   This method is what initializes Ignite with the given `Commands`
 
 #### Printing
 
 Ignite provides multiple methods for output, including the ability to customize color
 
 -   `CLI.Help()`
-    -   Help prints out the `CommandList` in an easy-to-read format
+    -   Help prints out the `Commands` in an easy-to-read format
 -   `CLI.Break()`
     -   Outputs a line of hypens to a new line in the Console
 -   `CLI.Out(string s = "")`
@@ -84,7 +84,7 @@ During command functions, Ignite provides quick methods to automatically parse a
 ## Structure
 
 ```cs
-public static CommandList Commands = new CommandList
+public static Commands Commands = new Commands
 {
     new Command
     {
@@ -166,7 +166,7 @@ namespace IgniteExample
 {
     class Program
     {
-        static CommandList commands = new CommandList
+        static Commands commands = new Commands
         {
             new Command
             {
