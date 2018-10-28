@@ -18,12 +18,12 @@ namespace IgniteCLI
         public static IgniteOptions Options = new IgniteOptions();
 
         private static bool Stopped = false;
-        private static CommandList Commands;
-        private static CommandList DefaultCommands = new CommandList();
+        private static Commands Commands;
+        private static Commands DefaultCommands = new Commands();
 
         private static string InputPrefix = "> ";
 
-        public static void Start(CommandList commands)
+        public static void Start(Commands commands)
         {
             Initialize(commands);
             
@@ -44,7 +44,7 @@ namespace IgniteCLI
             }
         }
 
-        private static void Initialize(CommandList commands)
+        private static void Initialize(Commands commands)
         {
             Stopped = false;
 

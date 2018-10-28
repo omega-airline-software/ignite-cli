@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IgniteCLI
 {
-    public class CommandList : List<Command>
+    public class Commands : List<Command>
     {
         public Command this[string s]
         {
