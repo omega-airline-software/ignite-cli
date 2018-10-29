@@ -7,7 +7,7 @@ namespace Sample
     {
         static void Main(string[] a)
         {
-            CLI.Start(new CommandList
+            CLI.Start(new Commands
             {
                 new Command
                 {
